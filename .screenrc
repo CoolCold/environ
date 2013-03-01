@@ -1,0 +1,8 @@
+term "screen-256color"
+vbell off
+windows
+startup_message off
+hardstatus alwayslastline "%c  %D %d %M %Y  %=[ %w ] "
+defscrollback 10000
+sorendition Wb
+

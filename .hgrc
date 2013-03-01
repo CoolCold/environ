@@ -1,0 +1,14 @@
+[ui]
+username = Roman Ovchinnikov <coolthecold@gmail.com>
+ssh = ssh -C
+
+[alias]
+latest = log --limit 3
+id = id -intb
+tree = glog -l 9 --style compact
+
+[extensions]
+hgext.graphlog =
+color =
+purge =
+
