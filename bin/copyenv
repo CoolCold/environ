@@ -8,6 +8,8 @@ AKEY_FILE=$(eval echo "$AKEY_TMPL")
 DEFAULT_AUTHCOPY=NO
 RHOST=""
 
+ENVFILE=".envversion.txt"
+
 print_usage() {
     echo "Usage: $PROGNAME [-A] -H hostname"
     echo ""
@@ -71,7 +73,7 @@ if [ "x$AUTHCOPY" = "xYES" ];then
         echo "$AKEY_FILE wasn't copied - empty/unable to read, skipping"
     fi
 fi
-for i in bin .vimrc .vim .screenrc .profile .bash_profile .bashrc .gitconfig .hgrc .tmux.conf ;do
+for i in bin .vimrc .vim .screenrc .profile .bash_profile .bashrc .gitconfig .hgrc .tmux.conf "${ENVFILE}" ;do
     if [ -r $i ];then
         scp -r "$i" "$RHOST":
     fi
