@@ -17,7 +17,6 @@ then
     export SSH_AUTH_SOCK=$SOCK
 fi
 
-
 # include .bashrc if it exists
 if [ -f ~/.bashrc ]; then
     . ~/.bashrc

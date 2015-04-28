@@ -94,6 +94,7 @@ fi
 #alias la='ls -A'
 #alias l='ls -CF'
 alias tma="tmux attach || tmux"
+alias tns="tmux new-session"
 
 # making some horizontal lines
 alias hrr='date;~/bin/hr - "#" -'
@@ -135,3 +136,10 @@ export EDITOR
 
 #Setting separate history for for root mode:
 if [ $(id -u) == "0" ];then HISTFILE=~/.bash_history-root;fi
+
+
+#eval "$(/home/coolcold/.chefvm/bin/chefvm init -)"
+if [ -f ~/.bashrc.local ]; then
+    . ~/.bashrc.local
+fi
+
