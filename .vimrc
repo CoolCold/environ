@@ -13,12 +13,15 @@ set hidden
 set hlsearch
 set smartindent
 set autoindent
+set modeline
+set modelines=5
 syntax on
 " colorscheme evening
 colorscheme lucius
 " colorscheme desert256
 
 set background=dark
+colorscheme lucius
 
 " Uncomment the following to have Vim jump to the last position when
 " reopening a file
@@ -32,6 +35,9 @@ endif
 " according to the detected filetype.
 if has("autocmd")
   filetype plugin indent on
+  " for html/rb files, 2 spaces
+  autocmd Filetype html setlocal ts=2 sw=2 expandtab
+  autocmd Filetype ruby setlocal ts=2 sw=2 expandtab
 endif
 
 ""key bind/rebinds
