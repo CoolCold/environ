@@ -35,6 +35,7 @@ endif
 " according to the detected filetype.
 if has("autocmd")
   filetype plugin indent on
+  autocmd BufNewFile,BufRead *.conf set filetype=conf
   " for html/rb files, 2 spaces
   autocmd Filetype html setlocal ts=2 sw=2 expandtab
   autocmd Filetype ruby setlocal ts=2 sw=2 expandtab
