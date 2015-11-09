@@ -134,6 +134,9 @@ export EDITOR
     PROMPT_COMMAND="history -a"
 #fi
 
+#debian email for dch(1)
+export DEBEMAIL='coolthecold@gmail.com'
+
 #Setting separate history for for root mode:
 if [ $(id -u) == "0" ];then HISTFILE=~/.bash_history-root;fi
 
