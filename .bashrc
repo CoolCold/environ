@@ -95,6 +95,9 @@ fi
 #alias l='ls -CF'
 alias tma="tmux attach || tmux"
 alias tns="tmux new-session"
+function tmw {
+    tmux split-window -dh "$*"
+}
 
 # making some horizontal lines
 alias hrr='date;~/bin/hr - "#" -'
