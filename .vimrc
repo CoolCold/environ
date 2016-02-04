@@ -61,3 +61,4 @@ endfunc
 " Paste Mode!  Dang! <F10>
 nnoremap <silent> <F10> :call Paste_on_off()<CR>
 set pastetoggle=<F10>
+vnoremap // y/<C-R>"<CR>
