@@ -39,6 +39,7 @@ if has("autocmd")
   " for html/rb files, 2 spaces
   autocmd Filetype html setlocal ts=2 sw=2 expandtab
   autocmd Filetype ruby setlocal ts=2 sw=2 expandtab
+  autocmd Filetype python setlocal tabstop=8 expandtab shiftwidth=4 softtabstop=4
 endif
 
 ""key bind/rebinds
