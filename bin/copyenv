@@ -73,9 +73,4 @@ if [ "x$AUTHCOPY" = "xYES" ];then
         echo "$AKEY_FILE wasn't copied - empty/unable to read, skipping"
     fi
 fi
-for i in bin .vimrc .vim .screenrc .profile .bash_profile .bashrc .gitconfig .hgrc .tmux.conf "${ENVFILE}" ;do
-    if [ -r $i ];then
-        scp -r "$i" "$RHOST":
-    fi
-done
-
+scp -r bin .vimrc .vim .screenrc .profile .bash_profile .bashrc .gitconfig .hgrc .tmux.conf .inputrc "${ENVFILE}" "$RHOST":
