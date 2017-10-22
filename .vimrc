@@ -15,7 +15,11 @@ set smartindent
 set autoindent
 set modeline
 set modelines=5
-set listchars=eol:¶
+"set listchars=eol:¶
+"set listchars=eol:¬
+"set listchars=eol:˩
+"set listchars=eol:┘
+set listchars=eol:┐
 set list
 syntax on
 " colorscheme evening
