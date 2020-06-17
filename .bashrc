@@ -126,6 +126,41 @@ fi
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin/" ] ; then
+    PATH="$HOME/.local/bin/:$PATH"
+fi
+
+
+#complete ssh hosts
+#Taken from https://blog.petdance.com/2019/10/31/tab-completion-for-ssh-scp/
+__complete_ssh_host() {
+    local KNOWN_FILE=~/.ssh/known_hosts
+    if [ -r $KNOWN_FILE ] ; then
+        #local KNOWN_LIST=`cut -f 1 -d ' ' $KNOWN_FILE | cut -f 1 -d ',' | grep -v '^[0-9[]'`
+        #grepping out the hashed hosts
+        #regular format: host.example.com,1.2.3.4 ssh-rsa AAA...ZZZ==
+        #hashed: |1|agMU+WHZHQo6F7tsy3YpftK .....
+        local KNOWN_LIST=`cut -f 1 -d ' ' ~/.ssh/known_hosts | grep -v '^\|'| cut -f 1 -d ',' | grep -v '^[0-9[]'`
+    fi
+
+    local CONFIG_FILE=~/.ssh/config
+    if [ -r $CONFIG_FILE ] ; then
+        local CONFIG_LIST=`awk '/^Host [A-Za-z]+/ {print $2}' $CONFIG_FILE`
+    fi
+
+    local PARTIAL_WORD="${COMP_WORDS[COMP_CWORD]}";
+
+    COMPREPLY=( $(compgen -W "$KNOWN_LIST$IFS$CONFIG_LIST" -- "$PARTIAL_WORD") )
+
+    return 0
+}
+
+complete -F __complete_ssh_host ssh
+#my own alias for ssh - `s`
+complete -F __complete_ssh_host s
+complete -f -F __complete_ssh_host scp
+
 
 EDITOR=vim
 export EDITOR
