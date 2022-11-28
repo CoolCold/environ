@@ -31,6 +31,7 @@ rma = !git status | grep deleted | cut -d ' ' -f 5 | xargs git rm
 unstage = reset HEAD --
 un = reset HEAD --
 slog = log --pretty=format:'%cd [%h] %an: %s' --date=short
+sslog = log -n 10 --pretty=format:'%cd [%h] %an: %s' --date=short
 glog = log --graph --decorate --pretty=oneline --abbrev-commit --all
 lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 last = log -1 HEAD
