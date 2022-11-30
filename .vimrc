@@ -21,6 +21,7 @@ set modelines=5
 "set listchars=eol:┘
 set listchars=eol:┐
 set list
+set lazyredraw " The screen will not be redrawn while executing macros
 syntax on
 " colorscheme evening
 " colorscheme lucius
@@ -48,6 +49,7 @@ if has("autocmd")
   autocmd Filetype html setlocal ts=2 sw=2 expandtab
   autocmd Filetype ruby setlocal ts=2 sw=2 expandtab
   autocmd Filetype python setlocal tabstop=8 expandtab shiftwidth=4 softtabstop=4
+  autocmd Filetype yaml setlocal cursorcolumn
 endif
 
 ""key bind/rebinds
