@@ -25,12 +25,13 @@ set lazyredraw " The screen will not be redrawn while executing macros
 syntax on
 " colorscheme evening
 " colorscheme lucius
-colorscheme solarized8
-" colorscheme desert256
+" colorscheme solarized8
+colorscheme solarized8_low
 
 set background=dark
 " colorscheme lucius
-colorscheme solarized8
+" colorscheme solarized8
+colorscheme solarized8_low
 
 " Uncomment the following to have Vim jump to the last position when
 " reopening a file

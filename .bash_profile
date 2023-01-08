@@ -5,6 +5,11 @@
 # the default umask is set in /etc/login.defs
 #umask 022
 
+# include .bashrc if it exists
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
+
 # Predictable SSH authentication socket location - useful under tmux/screen.
 #SOCK="/tmp/ssh-agent-$USER-screen"
 #due to https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/sysctl/fs.txt?id=refs/tags/v3.19#n182 aka protected symlinks, root cannot use user's ssh auth with 1777 mode on /tmp
@@ -16,9 +21,3 @@ then
     ln -sf $SSH_AUTH_SOCK $SOCK
     export SSH_AUTH_SOCK=$SOCK
 fi
-
-# include .bashrc if it exists
-if [ -f ~/.bashrc ]; then
-    . ~/.bashrc
-fi
-

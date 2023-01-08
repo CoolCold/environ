@@ -144,9 +144,15 @@ __complete_ssh_host() {
         local KNOWN_LIST=`cut -f 1 -d ' ' ~/.ssh/known_hosts | grep -v '^\|'| cut -f 1 -d ',' | grep -v '^[0-9[]'`
     fi
 
+    # main config
     local CONFIG_FILE=~/.ssh/config
     if [ -r $CONFIG_FILE ] ; then
         local CONFIG_LIST=`awk '/^Host [A-Za-z]+/ {print $2}' $CONFIG_FILE`
+    fi
+    # includes for ssh
+    local CONFIG_FILE=~/.ssh/includes
+    if [ -d $CONFIG_FILE ] ; then
+        local CONFIG_LIST+=`awk '/^Host [A-Za-z]+/ {print $2}' ${CONFIG_FILE}/*.conf`
     fi
 
     local PARTIAL_WORD="${COMP_WORDS[COMP_CWORD]}";
