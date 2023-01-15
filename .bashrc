@@ -172,11 +172,11 @@ EDITOR=vim
 export EDITOR
 
 #saving history
-#if ! [ -z $PROMPT_COMMAND ];then
-#    PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
-#else
-    PROMPT_COMMAND="history -a"
-#fi
+if ! [ -z "$PROMPT_COMMAND" ];then
+  PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
+else
+  PROMPT_COMMAND="history -a"
+fi
 
 #debian email for dch(1)
 export DEBEMAIL='coolthecold@gmail.com'
