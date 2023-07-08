@@ -95,12 +95,54 @@ alias ll='ls -l'
 #alias l='ls -CF'
 alias tma="tmux attach || tmux"
 alias tns="tmux new-session"
+alias tmuxenvstart="_tmux_env_start"
 function tmw {
     tmux split-window -dh "$*"
 }
+function _tmux_env_start {
+    #set -x
+    local ENV_TMUXSETUPCONFIG=${TMUXSETUPCONFIG:-}
+    local ARG_TMUXSETUPCONFIG="$1"
+    local DEFAULT_TMUXSETUPCONFIG=".tmux.setupconfig.sh"
 
-# making some horizontal lines
-alias hrr='date;~/bin/hr - "#" -'
+    # order of precedence:
+    # * CLI arg
+    # * ENV var - expected to be used with 'direnv'
+    # * default value
+    #
+    # if value is present but file doesn not exist - do nothing
+    local _TMUXSETUPCONFIG="${DEFAULT_TMUXSETUPCONFIG}"
+    local _TMUXSETUPCONFIG="${ENV_TMUXSETUPCONFIG:-$_TMUXSETUPCONFIG}"
+    local _TMUXSETUPCONFIG="${ARG_TMUXSETUPCONFIG:-$_TMUXSETUPCONFIG}"
+    #set +x
+
+    if [ -f "$_TMUXSETUPCONFIG" ];then
+        if ! . "$_TMUXSETUPCONFIG" ;then
+            echo "cannot run config file $_TMUXSETUPCONFIG . Check permissions?"
+            #exit 2
+        fi
+    else
+        echo "specified config file $_TMUXSETUPCONFIG ( $(realpath "${_TMUXSETUPCONFIG}") ) cannot be found"
+        #exit 2
+    fi
+
+#    echo "tmux config: ${_TMUXSETUPCONFIG}"
+
+#### config example ####
+##!/bin/bash
+#SUBPROJDIR='infra/tests/puppet-tests/puppet-mutagen/'
+#cd "$SUBPROJDIR" || exit 2
+#tmux new-session -d -s puppet 'bash'
+#tmux new-window
+#tmux new-window
+#tmux new-window
+#tmux new-window
+#tmux new-window
+#tmux send 'cd ../puppet-enc' ENTER
+#tmux rename-window -t 6 'enc'
+#tmux select-window -t 1
+#tmux attach;
+}
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
