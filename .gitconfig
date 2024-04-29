@@ -38,9 +38,10 @@ last = log -1 HEAD
 poh = push origin HEAD
 sdiff = !git diff && git submodule foreach 'git diff'
 ss = submodule summary
-  sbr = submodule foreach git branch
-  sbp = submodule foreach git pull
-  pullrs = pull --recurse-submodules
+sbr = submodule foreach git branch
+sbp = submodule foreach git pull
+sbcm = submodule foreach git checkout master
+pullrs = pull --recurse-submodules
 
 [color]
         diff = auto
