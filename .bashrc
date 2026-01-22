@@ -93,6 +93,9 @@ fi
 alias ll='ls -l'
 #alias la='ls -A'
 #alias l='ls -CF'
+# from Kevin's configs - poor man's httping
+alias curlspeed='curl -L --silent -o /dev/null -w "%{url_effective} (%{remote_ip}): %{http_code}/%{num_redirects} , Connect: %{time_connect}s, ConnPretransfer: %{time_pretransfer}, Lookup: %{time_namelookup}s, Total: %{time_total}s\n"'
+
 alias tma="tmux attach || tmux"
 alias tns="tmux new-session"
 alias tmuxenvstart="_tmux_env_start"
@@ -202,6 +205,36 @@ __complete_ssh_host() {
     COMPREPLY=( $(compgen -W "$KNOWN_LIST$IFS$CONFIG_LIST" -- "$PARTIAL_WORD") )
 
     return 0
+}
+
+__dump_ssh_hosts_to_stdout() {
+    local KNOWN_FILE=~/.ssh/known_hosts
+    if [ -r $KNOWN_FILE ] ; then
+        #local KNOWN_LIST=`cut -f 1 -d ' ' $KNOWN_FILE | cut -f 1 -d ',' | grep -v '^[0-9[]'`
+        #grepping out the hashed hosts
+        #regular format: host.example.com,1.2.3.4 ssh-rsa AAA...ZZZ==
+        #hashed: |1|agMU+WHZHQo6F7tsy3YpftK .....
+        local KNOWN_LIST=`cut -f 1 -d ' ' ~/.ssh/known_hosts | grep -v '^\|'| cut -f 1 -d ',' | grep -v '^[0-9[]'`
+    fi
+
+    # main config
+    local CONFIG_FILE=~/.ssh/config
+    if [ -r $CONFIG_FILE ] ; then
+        local CONFIG_LIST=`awk '/^Host [A-Za-z]+/ {print $2}' $CONFIG_FILE`
+    fi
+    # includes for ssh
+    local CONFIG_FILE=~/.ssh/includes
+    if [ -d $CONFIG_FILE ] ; then
+        local CONFIG_LIST+=`awk '/^Host [A-Za-z]+/ {print $2}' ${CONFIG_FILE}/*.conf`
+    fi
+
+    #local PARTIAL_WORD="${COMP_WORDS[COMP_CWORD]}";
+
+    #COMPREPLY=( $(compgen -W "$KNOWN_LIST$IFS$CONFIG_LIST" -- "$PARTIAL_WORD") )
+
+    #return 0
+    echo "${KNOWN_LIST}"
+    echo "${CONFIG_LIST}"
 }
 
 complete -F __complete_ssh_host ssh
