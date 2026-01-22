@@ -27,12 +27,15 @@ co = checkout
 sta = stash
 di = diff
 dic = diff --cached
+dinp = !git --no-pager diff
+diffmaster = !git diff master
 rma = !git status | grep deleted | cut -d ' ' -f 5 | xargs git rm
 unstage = reset HEAD --
 un = reset HEAD --
 slog = log --pretty=format:'%cd [%h] %an: %s' --date=short
 sslog = log -n 10 --pretty=format:'%cd [%h] %an: %s' --date=short
 glog = log --graph --decorate --pretty=oneline --abbrev-commit --all
+glogrecent = log --graph --decorate --pretty=oneline --abbrev-commit --all -n 20
 lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 last = log -1 HEAD
 poh = push origin HEAD
@@ -42,6 +45,11 @@ sbr = submodule foreach git branch
 sbp = submodule foreach git pull
 sbcm = submodule foreach git checkout master
 pullrs = pull --recurse-submodules
+
+# AI inspired
+showprev = show @~1
+showprevprev = show @~2
+showmrprev = show HEAD^2
 
 [color]
         diff = auto
