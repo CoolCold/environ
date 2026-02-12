@@ -10,6 +10,8 @@
 #export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 # ... or force ignoredups and ignorespace
 export HISTCONTROL=ignoreboth
+# erase dups too? look here https://unix.stackexchange.com/a/18443
+# HISTCONTROL=ignoredups:erasedups
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -155,7 +157,8 @@ if [ -f /etc/bash_completion ]; then
 fi
 
 #adding path
-NEWPATH=/usr/kerberos/sbin:/usr/kerberos/bin:/usr/local/sbin:/usr/local/bin:/sbin:/usr/sbin:/opt/java/bin:/opt/sun/mq/bin
+#NEWPATH=/usr/kerberos/sbin:/usr/kerberos/bin:/usr/local/sbin:/usr/local/bin:/sbin:/usr/sbin:/opt/java/bin:/opt/sun/mq/bin
+NEWPATH=/usr/local/sbin:/usr/local/bin:/sbin:/usr/sbin:/opt/java/bin
 PATH=$PATH:$NEWPATH
 export PATH
 
@@ -172,8 +175,8 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin/" ] ; then
-    PATH="$HOME/.local/bin/:$PATH"
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
 fi
 
 
@@ -245,6 +248,7 @@ complete -f -F __complete_ssh_host scp
 
 EDITOR=vim
 export EDITOR
+command -v nvim >/dev/null && alias vim=nvim
 
 #saving history
 if ! [ -z "$PROMPT_COMMAND" ];then
@@ -259,8 +263,24 @@ export DEBEMAIL='coolthecold@gmail.com'
 #Setting separate history for for root mode:
 if [ $(id -u) == "0" ];then HISTFILE=~/.bash_history-root;fi
 
+if command -v "asdf" >/dev/null && [ -d "$HOME/.asdf" ] ; then
+  #echo "found asdf on bash init"
+  export ASDF_DATA_DIR="$HOME/.asdf"
+  export PATH="$ASDF_DATA_DIR/shims:$PATH"
+fi
 
-#eval "$(/home/coolcold/.chefvm/bin/chefvm init -)"
+# TODO - review this for older versions of ASDF / systems where it's yet needed or keep in .bashrc.local
+#for i in $HOME/.asdf/asdf.sh $HOME/.asdf/completions/asdf.bash;do
+#  if [ -f $i ]; then
+#    . $i
+#  fi
+#done
+#unset i
+
+command -v starship >/dev/null && eval "$(starship init bash)"
+command -v fzf >/dev/null && eval "$(fzf --bash)"
+command -v direnv >/dev/null && eval "$(direnv hook bash)"
+
 if [ -f ~/.bashrc.local ]; then
     . ~/.bashrc.local
 fi
