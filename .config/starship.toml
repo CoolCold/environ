@@ -1,0 +1,107 @@
+# Starship configuration
+# https://starship.rs/config/
+
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
+
+[time]
+disabled = false
+#disabled = true
+format = '🕙[\[ $time \]]($style) '
+time_format = "%T"
+
+[battery]
+disabled = true
+
+[netns]
+disabled = true
+
+[container]
+disabled = true
+
+
+#[directory]
+#truncation_length = 3
+#truncate_to_repo = true
+#
+#[git_branch]
+#symbol = "🌱 "
+
+# Disable unnecessary modules for speed
+#[package]
+#disabled = true
+#
+#[nodejs]
+#disabled = true
+#
+#[python]
+#disabled = true
+#
+#[ruby]
+#disabled = true
+#
+#[rust]
+#disabled = true
+#
+#[golang]
+#disabled = true
+#
+#[php]
+#disabled = true
+
+[java]
+disabled = true
+
+[kotlin]
+disabled = true
+
+[haskell]
+disabled = true
+
+[elm]
+disabled = true
+
+[erlang]
+disabled = true
+
+[vagrant]
+disabled = true
+
+[docker_context]
+disabled = true
+
+[helm]
+disabled = true
+
+#[kubernetes]
+#disabled = true
+#
+#[terraform]
+#disabled = true
+
+[aws]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[azure]
+disabled = true
+
+[nix_shell]
+disabled = true
+
+[conda]
+disabled = true
+
+[memory_usage]
+disabled = true
+
+[crystal]
+disabled = true
+
+#[cmd_duration]
+#disabled = true
+#
+#[line_break]
+#disabled = true

@@ -10,6 +10,10 @@ RHOST=""
 
 ENVFILE=".envversion.txt"
 
+# Nested config files: source and destination (both relative to homedir)
+NESTED_CONFIG_SRC=(".config/starship.toml" ".config/nvim/init.vim")
+NESTED_CONFIG_DST=(".config/starship.toml" ".config/nvim/init.vim")
+
 print_usage() {
     echo "Usage: $PROGNAME [-A] -H hostname"
     echo ""
@@ -40,7 +44,7 @@ while getopts ":hAH:" Option; do
   case $Option in
     h)
       print_help
-      exit $STATE_UNKNOWN
+      exit 0
       ;;
     H)
       RHOST=${OPTARG}
@@ -54,23 +58,41 @@ while getopts ":hAH:" Option; do
       ;;
   esac
 done
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
-if [ "x$RHOST" = "x" ];then
+if [ -z "$RHOST" ];then
     echo "hostname is not set!"
     print_help
     exit 2
 fi
 
 akey=""
-cd ~
-if [ "x$AUTHCOPY" = "xYES" ];then
+cd ~ || exit 2
+if [ "$AUTHCOPY" == "YES" ];then
     echo "copying $AKEY_FILE"
-    akey=$(cat $AKEY_FILE)
-    if [ $? -eq 0 -a ! -z "$akey" ];then
-        ssh "$RHOST" "mkdir -p ~/.ssh;chmod 700 .ssh;echo "$akey" > $AKEY_TMPL;chmod 600 $AKEY_TMPL"
+    if akey=$(cat "$AKEY_FILE") && [ -n "$akey" ];then
+        ssh "$RHOST" "mkdir -p ~/.ssh; chmod 700 ~/.ssh; echo '${akey}' > ~/.ssh/authorized_keys; chmod 600 ~/.ssh/authorized_keys"
     else
         echo "$AKEY_FILE wasn't copied - empty/unable to read, skipping"
     fi
 fi
 scp -r bin .vimrc .vim .screenrc .profile .bash_profile .bashrc .gitconfig .hgrc .tmux.conf .inputrc "${ENVFILE}" "$RHOST":
+
+# Phase 2: Nested configs - ensure dirs exist on remote, then copy
+if [ ${#NESTED_CONFIG_SRC[@]} -gt 0 ]; then
+    # Create all parent directories in one ssh call
+    dir_cmd=""
+    for dst in "${NESTED_CONFIG_DST[@]}"; do
+        dir=$(dirname "$dst")
+        dir_cmd="${dir_cmd} install -d ~/${dir};"
+    done
+    # shellcheck disable=SC2029
+    ssh "$RHOST" "$dir_cmd"
+    
+    # Copy each nested file
+    for i in "${!NESTED_CONFIG_SRC[@]}"; do
+        src="${NESTED_CONFIG_SRC[$i]}"
+        dst="${NESTED_CONFIG_DST[$i]}"
+        scp -r "$src" "$RHOST:$dst"
+    done
+fi
