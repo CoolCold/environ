@@ -19,7 +19,7 @@ print_help() {
     echo "This script intended to make export environment related files into current user's homedir" 
 }
 
-if [ -z $1 ];then
+if [ -z "$1" ];then
 	print_help
 	exit 1
 fi
@@ -49,13 +49,31 @@ GITVERSION=$(git describe --long --abbrev=10)
 GITVERSION=$(echo "${GITVERSION}"|sed 's%\(.*-[[:digit:]]\+-\)\(g\)\(.\{10\}$\)%\1\3%') #removing 'g' from git tag
 ENVFILE=".envversion.txt"
 
+# Nested config files: source and destination (both relative to homedir)
+NESTED_CONFIG_SRC=(".config/starship.toml" ".config/nvim/init.vim")
+NESTED_CONFIG_DST=(".config/starship.toml" ".config/nvim/init.vim")
+
 echo "generating environ version file ${ENVFILE}, id string will be ${GITVERSION}"
 echo "${GITVERSION}" > "${ENVFILE}"
-for i in .bashrc bin .profile .bash_profile .screenrc .vimrc .vim .gitconfig .hgrc .tmux.conf "${ENVFILE}" ;do
-    if [ "x${DOWRITE}" == "xYES" ];then
-        cp -av ${i} ~/
+for i in .bashrc bin .profile .bash_profile .screenrc .vimrc .vim .gitconfig .hgrc .tmux.conf .inputrc "${ENVFILE}" ;do
+    if [ "${DOWRITE}" == "YES" ];then
+        cp -av "${i}" ~/
     fi
-    if [ "x${DOCHECK}" == "xYES" ];then
-        diff -Naur "${i}" ~/"${i}"
+    if [ "${DOCHECK}" == "YES" ];then
+        diff -Naur "${i}" "${HOME}/${i}"
+    fi
+done
+
+# Phase 2: Nested configs
+for i in "${!NESTED_CONFIG_SRC[@]}"; do
+    src="${NESTED_CONFIG_SRC[$i]}"
+    dst="${HOME}/${NESTED_CONFIG_DST[$i]}"
+
+    if [ "${DOWRITE}" == "YES" ];then
+        # Create parent dir and copy (install -D creates dirs + copies in one go)
+        install -D -m 644 -v "$src" "$dst"
+    fi
+    if [ "${DOCHECK}" == "YES" ];then
+        diff -Naur "$src" "$dst"
     fi
 done
